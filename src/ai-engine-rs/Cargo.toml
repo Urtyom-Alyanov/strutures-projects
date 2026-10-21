@@ -1,0 +1,11 @@
+[package]
+name = "ai-engine-rs"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+name = "ai_engine"      # libai_engine.so / ai_engine.dll / libai_engine.dylib
+crate-type = ["cdylib"]
+
+[build-dependencies]
+csbindgen = "1"

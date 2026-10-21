@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AiEngine.Native/AiEngine.Native.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <!-- Для того, чтобы подключать нативные библиотеки -->
+    <AllowUnsafeBlock>true</AllowUnsafeBlock>
+
+    <!-- Конкоетно для Rust'а -->
+    <RustManifest>$(MSBuildThisFileDirectory)../ai-engine-rs/Cargo.toml</RustManifest>
+    <CargoProfile Condition="'$(Configuration)' == 'Release'">release</CargoProfile>
+    <CargoProfile Condition="'$(Configuration)' != 'Release'">debug</CargoProfile>
+    <CargoArgs Condition="'$(Configuration)' == 'Release'">--release</CargoArgs>
+  </PropertyGroup>
+
+  <!-- Как называется файл в зависимости от платформы -->
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+    <NativeFile>ai_engine.dll</NativeFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+    <NativeFile>libai_engine.so</NativeFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+    <NativeFile>libai_engine.dylib</NativeFile>
+  </PropertyGroup>
+
+
+  <!-- Перед сборкою сначала соберёт библиотеку -->
+  <Target Name="BuildRust" BeforeTargets="BeforeBuild">
+    <Exec Command="cargo build $(CargoArgs) --manifest-path &quot;$(RustManifest)&quot;" />
+    <ItemGroup>
+      <None Include="$(MSBuildThisFileDirectory)../../target/$(CargoProfile)/$(NativeFile)"
+        Link="runtimes/$(NETCoreSdkPortableRuntimeIdentifier)/native/$(NativeFile)"
+        Pack="true"
+        PackagePath="runtimes/$(NETCoreSdkPortableRuntimeIdentifier)/native/"
+        CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+  </Target>
+</Project>
