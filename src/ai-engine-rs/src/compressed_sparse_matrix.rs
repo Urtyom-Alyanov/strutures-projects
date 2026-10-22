@@ -1,6 +1,9 @@
+use derive_getters::Getters;
+
 use crate::error::{Result, Status, check_len, fail};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Getters)]
+#[repr(C)]
 pub struct CSR {
     row_count: usize,
     col_count: usize,
@@ -10,23 +13,9 @@ pub struct CSR {
 }
 
 impl CSR {
-    pub fn row_count(&self) -> usize {
-        self.row_count
-    }
-    pub fn col_count(&self) -> usize {
-        self.col_count
-    }
+    /// Количество ненулевых элементов
     pub fn nnz(&self) -> usize {
         self.data.len()
-    }
-    pub fn idxptr(&self) -> &[u32] {
-        &self.idxptr
-    }
-    pub fn indices(&self) -> &[u32] {
-        &self.indices
-    }
-    pub fn data(&self) -> &[f64] {
-        &self.data
     }
 
     /// Создать экземпляр структуры разреженной матрицы, хранящайся как CSR

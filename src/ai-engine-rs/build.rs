@@ -5,6 +5,6 @@ fn main() {
         .csharp_namespace("AiEngine.Native.Interop")
         .csharp_class_name("NativeMethods")
         .csharp_class_accessibility("internal")
-        .generate_csharp_file("../AiEngine.Native/NativeMethods.g.cs")
+        .generate_csharp_file("../AiEngine.Native/Interop/NativeMethods.g.cs")
         .unwrap();
 }

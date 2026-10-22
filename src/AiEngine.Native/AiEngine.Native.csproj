@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
 
     <!-- Для того, чтобы подключать нативные библиотеки -->
-    <AllowUnsafeBlock>true</AllowUnsafeBlock>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
     <!-- Конкоетно для Rust'а -->
     <RustManifest>$(MSBuildThisFileDirectory)../ai-engine-rs/Cargo.toml</RustManifest>

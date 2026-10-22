@@ -156,8 +156,8 @@ pub unsafe extern "C" fn ai_CSR_info(
 ) -> u32 {
     guard(|| unsafe {
         let m = handle(p)?;
-        write(row_count, m.row_count() as u32)?;
-        write(col_count, m.col_count() as u32)?;
+        write(row_count, m.row_count().clone() as u32)?;
+        write(col_count, m.col_count().clone() as u32)?;
         write(nnz, m.nnz() as u32)
     })
 }
