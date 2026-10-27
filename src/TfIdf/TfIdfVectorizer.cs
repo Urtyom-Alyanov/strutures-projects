@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-using TfIdf.Matrix;
+﻿using TfIdf.Matrix;
 
 namespace TfIdf;
 
@@ -9,26 +7,8 @@ namespace TfIdf;
 /// </summary>
 public class TfIdfVectorizer
 {
-    private Dictionary<string, uint> _vocabulary = new();
-    private double[] _idf = Array.Empty<double>();
-    
-    public Dictionary<string, uint> Vocabulary => _vocabulary;
-    public double[] Idf => _idf;
-    
-    /// <summary>
-    /// Токенизация текста
-    ///
-    /// То бишь обработка текста, получая из него "чистые" слова (приведённые к одному регистру и т.д.)
-    /// </summary>
-    /// <param name="text">текст</param>
-    /// <returns>Слова (токены)</returns>
-    private List<string> Tokenize(string text)
-    {
-        return Regex.Matches(text.ToLower(), @"\b\w+\b")
-            .Cast<Match>()
-            .Select(m => m.Value)
-            .ToList();
-    }
+    public Dictionary<string, uint> Vocabulary { get; private set; } = new();
+    public double[] Idf { get; private set; } = Array.Empty<double>();
 
     /// <summary>
     /// Обучает векторизатор на документах
@@ -42,9 +22,8 @@ public class TfIdfVectorizer
         var docTokensList = new List<List<string>>();
         var vocabSet = new HashSet<string>();
         
-        foreach (var doc in documents)
+        foreach (var tokens in documents.Select(TextProcessor.TokenizeAndNormalize))
         {
-            var tokens = Tokenize(doc);
             docTokensList.Add(tokens);
             foreach (var token in tokens)
             {
@@ -53,13 +32,13 @@ public class TfIdfVectorizer
         }
         
         var vocabularyList = vocabSet.OrderBy(v => v).ToList();
-        _vocabulary.Clear();
+        Vocabulary.Clear();
         for (uint i = 0; i < vocabularyList.Count; i++)
         {
-            _vocabulary[vocabularyList[(int)i]] = i;
+            Vocabulary[vocabularyList[(int)i]] = i;
         }
 
-        uint vocabSize = (uint)_vocabulary.Count;
+        uint vocabSize = (uint)Vocabulary.Count;
         
         var df = new int[vocabSize];
         foreach (var tokens in docTokensList)
@@ -67,17 +46,17 @@ public class TfIdfVectorizer
             var uniqueTokensInDoc = new HashSet<string>(tokens);
             foreach (var token in uniqueTokensInDoc)
             {
-                if (_vocabulary.TryGetValue(token, out uint colIdx))
+                if (Vocabulary.TryGetValue(token, out uint colIdx))
                 {
                     df[colIdx]++;
                 }
             }
         }
         
-        _idf = new double[vocabSize];
+        Idf = new double[vocabSize];
         for (int j = 0; j < vocabSize; j++)
         {
-            _idf[j] = Math.Log((1.0 + numDocs) / (1.0 + df[j])) + 1.0;
+            Idf[j] = Math.Log((1.0 + numDocs) / (1.0 + df[j])) + 1.0;
         }
         
         var values = new List<double>();
@@ -96,7 +75,7 @@ public class TfIdfVectorizer
             var termCounts = new Dictionary<uint, uint>();
             foreach (var token in tokens)
             {
-                if (!_vocabulary.TryGetValue(token, out uint colIdx))
+                if (!Vocabulary.TryGetValue(token, out uint colIdx))
                     continue;
 
                 termCounts.TryAdd(colIdx, 0);
@@ -109,7 +88,7 @@ public class TfIdfVectorizer
             {
                 double rawCount = termCounts[colIdx];
                 double tf = rawCount / tokens.Count;
-                double tfidf = tf * _idf[colIdx];
+                double tfidf = tf * Idf[colIdx];
 
                 values.Add(tfidf);
                 colIndices.Add(colIdx);
