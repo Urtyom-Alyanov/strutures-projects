@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/AiEngine.Native/AiEngine.Native.csproj" />
+    <Project Path="src/TfIdf/TfIdf.csproj" />
   </Folder>
 </Solution>
