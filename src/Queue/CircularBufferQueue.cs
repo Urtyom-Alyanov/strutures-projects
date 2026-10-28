@@ -1,11 +1,11 @@
 ﻿namespace Queue;
 
-public class CircularBufferQueue<T>(int capacity)
+public class CircularBufferQueue<T>(uint capacity)
 {
     private T[] _buffer = new T[capacity];
-    private int _head = 0;
-    private int _tail = 0;
-    public int Size { get; private set; }
+    private uint _head = 0;
+    private uint _tail = 0;
+    public uint Size { get; private set; }
     
     public bool IsEmpty() => Size == 0;
     public bool IsFull() => Size == capacity;
