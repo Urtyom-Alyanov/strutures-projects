@@ -28,6 +28,11 @@ public class SparseMatrixLinked(uint Rows, uint Cols)
         }
     }
     
+    /// <summary>
+    /// Преобразовать формат плотной матрицы в разреженную
+    /// </summary>
+    /// <param name="matrix">Плотная матрица</param>
+    /// <returns>Разреженная</returns>
     public static SparseMatrixLinked FromDense(double[,] matrix)
     {
         uint rows = (uint)matrix.GetLength(0);
@@ -60,6 +65,12 @@ public class SparseMatrixLinked(uint Rows, uint Cols)
         return sparseList;
     }
     
+    /// <summary>
+    /// Доступ к элементу матрицы по индексам <paramref name="row"/> и <paramref name="col"/>
+    /// </summary>
+    /// <param name="row">Строка</param>
+    /// <param name="col">Столбец</param>
+    /// <exception cref="IndexOutOfRangeException">Индекс за пределами матрицы</exception>
     public double this[uint row, uint col]
     {
         get
@@ -113,7 +124,11 @@ public class SparseMatrixLinked(uint Rows, uint Cols)
         }
     }
     
-    public SparseMatrix ToCsr()
+    /// <summary>
+    /// Преобразование матрицы на связных списках в матрицу на буффере
+    /// </summary>
+    /// <returns>Матрица на векторах в формате CSR</returns>
+    public SparseMatrix ToBufferSparseMatrix()
     {
         uint nnz = NonZeros;
         var values = new double[nnz];
@@ -138,6 +153,12 @@ public class SparseMatrixLinked(uint Rows, uint Cols)
         return new SparseMatrix(values, colIndices, rowPtr, Rows, Cols);
     }
     
+    /// <summary>
+    /// Умножение матрицы на вектор <paramref name="x"/>
+    /// </summary>
+    /// <param name="x">Вектор</param>
+    /// <returns>Результат умножения</returns>
+    /// <exception cref="ArgumentException">Длина вектора <paramref name="x"/> должна совпадать с количеством столбцов матрицы.</exception>
     public double[] Multiply(double[] x)
     {
         if (x.Length != Cols)
@@ -158,6 +179,10 @@ public class SparseMatrixLinked(uint Rows, uint Cols)
         return y;
     }
     
+    /// <summary>
+    /// Преобразует матрицу в "плотную"
+    /// </summary>
+    /// <returns>Плотный формат матрицы</returns>
     public double[,] ToDense()
     {
         var dense = new double[Rows, Cols];
