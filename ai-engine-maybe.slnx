@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/AiEngine.Native/AiEngine.Native.csproj" />
+    <Project Path="src/SortsAndSearch/SortsAndSearch.csproj" />
     <Project Path="src/Stacking/Stacking.csproj" />
     <Project Path="src/TfIdf/TfIdf.csproj" />
   </Folder>
