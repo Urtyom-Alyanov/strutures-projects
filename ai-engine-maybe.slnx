@@ -4,5 +4,6 @@
     <Project Path="src/SortsAndSearch/SortsAndSearch.csproj" />
     <Project Path="src/Stacking/Stacking.csproj" />
     <Project Path="src/TfIdf/TfIdf.csproj" />
+    <Project Path="src/TwoBalls/TwoBalls.csproj" />
   </Folder>
 </Solution>
