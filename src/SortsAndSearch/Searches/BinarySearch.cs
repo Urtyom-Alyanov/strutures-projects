@@ -1,4 +1,4 @@
-﻿namespace SortsAndSearch;
+﻿namespace SortsAndSearch.Searches;
 
 public class BinarySearch(int[] array) : ISearch
 {

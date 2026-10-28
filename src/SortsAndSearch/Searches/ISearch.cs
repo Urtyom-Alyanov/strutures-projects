@@ -1,4 +1,4 @@
-﻿namespace SortsAndSearch;
+﻿namespace SortsAndSearch.Searches;
 
 public interface ISearch
 {
